@@ -1,8 +1,80 @@
 package com.yarenkaplan.productinventory.services.impl;
 
+import com.yarenkaplan.productinventory.entity.Category;
+import com.yarenkaplan.productinventory.entity.Product;
+import com.yarenkaplan.productinventory.enums.InventoryStatus;
+import com.yarenkaplan.productinventory.repository.CategoryRepository;
+import com.yarenkaplan.productinventory.repository.ProductRepository;
 import com.yarenkaplan.productinventory.services.ProductService;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    //dependency injection
+    //loose coupling and testability purposes
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+
+    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository) {
+        this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
+    }
+
+    @Override
+    public void createProduct(String name, String description, BigDecimal price, int stock) {
+        Product product = new Product(name, description, price, stock);
+        productRepository.save(product);
+    }
+
+    @Override
+    public void updateProductById(Long id, String name, String description, BigDecimal price, int stock, Long categoryId) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not exist!"));
+        if (!product.getName().equals(name) && !name.isBlank()) {
+            product.setName(name);
+        }
+        if (!product.getDescription().equals(description) && !description.isBlank()) {
+            product.setDescription(description);
+        }
+
+        //if price defined as 0.0, it will be updated
+        if (!product.getPrice().equals(price)) {
+            product.setPrice(price);
+        }
+
+        //if stock defined as 0, it will be updated
+        if (!(product.getStock() == stock)) {
+            product.setStock(stock);
+        }
+        if (!(categoryId.intValue() == 0)) {
+            Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not exists!"));
+            product.setCategory(category);
+        }
+        productRepository.save(product);
+    }
+
+    @Override
+    public Optional<Product> findProductById(Long id) {
+        return productRepository.findById(id);
+    }
+
+    @Override
+    public List<Product> findAllProducts() {
+        return productRepository.findAll();
+    }
+
+    @Override
+    public void deleteProductById(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not exist!"));
+        productRepository.delete(product);
+    }
+
+    @Override
+    public void deleteAllProducts() {
+        productRepository.deleteAll();
+    }
 }

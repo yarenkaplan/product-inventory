@@ -4,8 +4,7 @@ import com.yarenkaplan.productinventory.enums.InventoryStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -16,18 +15,11 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "products")
 public class Product {
-
-    public Product() {
-    }
-
-    public Product(String name, String description, BigDecimal price, int stock) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.stock = stock;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,7 +47,7 @@ public class Product {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 

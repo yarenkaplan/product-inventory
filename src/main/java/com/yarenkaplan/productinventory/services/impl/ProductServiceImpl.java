@@ -1,14 +1,17 @@
 package com.yarenkaplan.productinventory.services.impl;
 
+import com.yarenkaplan.productinventory.dto.ProductResponseDTO;
 import com.yarenkaplan.productinventory.entity.Category;
 import com.yarenkaplan.productinventory.entity.Product;
 import com.yarenkaplan.productinventory.enums.InventoryStatus;
 import com.yarenkaplan.productinventory.repository.CategoryRepository;
 import com.yarenkaplan.productinventory.repository.ProductRepository;
 import com.yarenkaplan.productinventory.services.ProductService;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,17 +30,23 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void createProduct(String name, String description, BigDecimal price, int stock) {
-        Product product = new Product(name, description, price, stock);
+        Product product = new Product();
+        product.setName(name);
+        product.setDescription(description);
+        product.setPrice(price);
+        product.setStock(stock);
+
         productRepository.save(product);
     }
 
     @Override
     public void updateProductById(Long id, String name, String description, BigDecimal price, int stock, Long categoryId) {
         Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not exist!"));
-        if (!product.getName().equals(name) && !name.isBlank()) {
+        if (!product.getName().equals(name) && !name.trim().isBlank() && (name != null)) {
             product.setName(name);
         }
-        if (!product.getDescription().equals(description) && !description.isBlank()) {
+
+        if (!product.getDescription().equals(description) && !description.trim().isBlank() && (description != null)) {
             product.setDescription(description);
         }
 
@@ -58,13 +67,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<Product> findProductById(Long id) {
-        return productRepository.findById(id);
+    public ProductResponseDTO findProductById(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+
+        return mapToResponseDTO(product);
+    }
+
+    private ProductResponseDTO mapToResponseDTO(Product product) {
+        return new ProductResponseDTO(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getStock());
     }
 
     @Override
-    public List<Product> findAllProducts() {
-        return productRepository.findAll();
+    public List<ProductResponseDTO> findAllProducts() {
+        return productRepository.findAll().stream().map(this::mapToResponseDTO).toList();
     }
 
     @Override

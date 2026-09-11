@@ -1,5 +1,6 @@
 package com.yarenkaplan.productinventory.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,5 +17,6 @@ public class ProductResponseDTO {
     private String name;
     private String description;
     private BigDecimal price;
-    private int stock;
+    private Integer stock;
+    private Long categoryId;
 }

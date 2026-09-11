@@ -1,15 +1,13 @@
 package com.yarenkaplan.productinventory.controller;
 
 import com.yarenkaplan.productinventory.dto.ProductResponseDTO;
-import com.yarenkaplan.productinventory.entity.Product;
 import com.yarenkaplan.productinventory.requests.CreateProductRequest;
 import com.yarenkaplan.productinventory.requests.UpdateProductRequest;
 import com.yarenkaplan.productinventory.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/products")
@@ -22,7 +20,7 @@ public class ProductController {
 
     //post
     @PostMapping
-    public void createProduct(@RequestBody CreateProductRequest createProductRequest) {
+    public void createProduct(@Valid @RequestBody CreateProductRequest createProductRequest) {
         productService.createProduct(createProductRequest.getName(), createProductRequest.getDescription(), createProductRequest.getPrice(), createProductRequest.getStock());
     }
 

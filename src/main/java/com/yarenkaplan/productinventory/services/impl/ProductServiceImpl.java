@@ -74,7 +74,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private ProductResponseDTO mapToResponseDTO(Product product) {
-        return new ProductResponseDTO(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getStock());
+        Long categoryId = product.getCategory() != null ? product.getCategory().getId() : null;
+        return new ProductResponseDTO(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getStock(), categoryId);
     }
 
     @Override

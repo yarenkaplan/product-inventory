@@ -4,6 +4,8 @@ import com.yarenkaplan.productinventory.dto.ProductResponseDTO;
 import com.yarenkaplan.productinventory.entity.Category;
 import com.yarenkaplan.productinventory.entity.Product;
 import com.yarenkaplan.productinventory.enums.InventoryStatus;
+import com.yarenkaplan.productinventory.errors.CategoryNotFoundException;
+import com.yarenkaplan.productinventory.errors.ProductNotFoundException;
 import com.yarenkaplan.productinventory.repository.CategoryRepository;
 import com.yarenkaplan.productinventory.repository.ProductRepository;
 import com.yarenkaplan.productinventory.services.ProductService;
@@ -41,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void updateProductById(Long id, String name, String description, BigDecimal price, int stock, Long categoryId) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not exist!"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
         if (!product.getName().equals(name) && !name.trim().isBlank() && (name != null)) {
             product.setName(name);
         }
@@ -60,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
             product.setStock(stock);
         }
         if (!(categoryId.intValue() == 0)) {
-            Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not exists!"));
+            Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundException(categoryId));
             product.setCategory(category);
         }
         productRepository.save(product);
@@ -68,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponseDTO findProductById(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
 
         return mapToResponseDTO(product);
     }
@@ -85,7 +87,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProductById(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not exist!"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
         productRepository.delete(product);
     }
 

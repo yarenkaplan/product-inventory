@@ -30,6 +30,24 @@ public class ProductController {
         return productService.findAllProducts();
     }
 
+    //get active products
+    @GetMapping("/activeProducts")
+    public List<ProductResponseDTO> findActiveProducts() {
+        return productService.findActiveProducts();
+    }
+
+    //get products sorted by price
+    @GetMapping("/findProductsSortedByPrice")
+    public List<ProductResponseDTO> findProductsSortedByPrice() {
+        return productService.findProductsSortedByPrice();
+    }
+
+    //get products sorted by price reverse order
+    @GetMapping("/findProductsSortedByPriceReverseOrder")
+    public List<ProductResponseDTO> findProductsSortedByPriceReverseOrder() {
+        return productService.findProductsSortedByPriceReverseOrder();
+    }
+
     //get by id
     @GetMapping("/{id}")
     public ProductResponseDTO findProductById(@PathVariable Long id) {
@@ -39,7 +57,7 @@ public class ProductController {
     //put
     @PutMapping("/{id}")
     public void updateProductById(@PathVariable Long id, @RequestBody UpdateProductRequest updateProductRequest) {
-        productService.updateProductById(id, updateProductRequest.getName(), updateProductRequest.getDescription(), updateProductRequest.getPrice(), updateProductRequest.getStock(), updateProductRequest.getCategoryId());
+        productService.updateProductById(id, updateProductRequest.getName(), updateProductRequest.getDescription(), updateProductRequest.getPrice(), updateProductRequest.getStock(), updateProductRequest.getStatus(), updateProductRequest.getCategoryId());
     }
 
     //delete

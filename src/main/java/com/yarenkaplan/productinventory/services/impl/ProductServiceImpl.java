@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProductById(Long id, String name, String description, BigDecimal price, int stock, Long categoryId) {
+    public void updateProductById(Long id, String name, String description, BigDecimal price, int stock, InventoryStatus status, Long categoryId) {
         Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
         if (!product.getName().equals(name) && !name.trim().isBlank() && (name != null)) {
             product.setName(name);
@@ -61,6 +62,12 @@ public class ProductServiceImpl implements ProductService {
         if (!(product.getStock() == stock)) {
             product.setStock(stock);
         }
+
+        //if status defined different, it will be updated
+        if (!(product.getStatus() == status)) {
+            product.setStatus(status);
+        }
+
         if (!(categoryId.intValue() == 0)) {
             Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundException(categoryId));
             product.setCategory(category);
@@ -77,7 +84,22 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductResponseDTO mapToResponseDTO(Product product) {
         Long categoryId = product.getCategory() != null ? product.getCategory().getId() : null;
-        return new ProductResponseDTO(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getStock(), categoryId);
+        return new ProductResponseDTO(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getStock(), product.getStatus(), categoryId);
+    }
+
+    @Override
+    public List<ProductResponseDTO> findActiveProducts() {
+        return productRepository.findAll().stream().filter(product -> product.getStatus() == InventoryStatus.ACTIVE).map(this::mapToResponseDTO).toList();
+    }
+
+    @Override
+    public List<ProductResponseDTO> findProductsSortedByPrice() {
+        return productRepository.findAll().stream().sorted(Comparator.comparing(Product::getPrice)).map(this::mapToResponseDTO).toList();
+    }
+
+    @Override
+    public List<ProductResponseDTO> findProductsSortedByPriceReverseOrder() {
+        return productRepository.findAll().stream().sorted(Comparator.comparing(Product::getPrice).reversed()).map(this::mapToResponseDTO).toList();
     }
 
     @Override

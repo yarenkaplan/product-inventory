@@ -18,10 +18,16 @@ public interface ProductService {
 
     List<ProductResponseDTO> findProductsByCategoryId(Long categoryId);
 
+    List<ProductResponseDTO> findProductsByNameContainingIgnoreCase(String name);
+
     List<ProductResponseDTO> findActiveProducts();
+
+    List<ProductResponseDTO> findProductsByStockGreaterThan(Integer stock);
 
     List<ProductResponseDTO> findProductsSortedByPrice();
     List<ProductResponseDTO> findProductsSortedByPriceReverseOrder();
+
+    List<ProductResponseDTO> findProductsByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice);
 
     List<ProductResponseDTO> findAllProducts();
 

@@ -1,12 +1,14 @@
 package com.yarenkaplan.productinventory.controller;
 
 import com.yarenkaplan.productinventory.dto.ProductResponseDTO;
+import com.yarenkaplan.productinventory.entity.Product;
 import com.yarenkaplan.productinventory.requests.product.CreateProductRequest;
 import com.yarenkaplan.productinventory.requests.product.UpdateProductRequest;
 import com.yarenkaplan.productinventory.services.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -36,6 +38,11 @@ public class ProductController {
         return productService.findActiveProducts();
     }
 
+    @GetMapping("/findProductsByStockGreaterThan/{stock}")
+    public List<ProductResponseDTO> findProductsByStockGreaterThan(@PathVariable Integer stock) {
+        return productService.findProductsByStockGreaterThan(stock);
+    }
+
     //get products sorted by price
     @GetMapping("/findProductsSortedByPrice")
     public List<ProductResponseDTO> findProductsSortedByPrice() {
@@ -48,6 +55,11 @@ public class ProductController {
         return productService.findProductsSortedByPriceReverseOrder();
     }
 
+    @GetMapping("/findProductsByPriceBetween/{minPrice}/{maxPrice}")
+    public List<ProductResponseDTO> findProductsByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice) {
+        return productService.findProductsByPriceBetween(minPrice, maxPrice);
+    }
+
     //get by id
     @GetMapping("/{id}")
     public ProductResponseDTO findProductById(@PathVariable Long id) {
@@ -57,6 +69,11 @@ public class ProductController {
     @GetMapping("/findProductsByCategoryId/{categoryId}")
     public List<ProductResponseDTO> findProductsByCategoryId(@PathVariable Long categoryId) {
         return productService.findProductsByCategoryId(categoryId);
+    }
+
+    @GetMapping("/findProductsByNameContainingIgnoreCase/{name}")
+    public List<ProductResponseDTO> findProductsByNameContainingIgnoreCase(@PathVariable String name) {
+        return productService.findProductsByNameContainingIgnoreCase(name);
     }
 
     //put

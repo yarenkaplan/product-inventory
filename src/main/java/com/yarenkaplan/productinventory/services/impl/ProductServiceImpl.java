@@ -9,15 +9,11 @@ import com.yarenkaplan.productinventory.errors.ProductNotFoundException;
 import com.yarenkaplan.productinventory.repository.CategoryRepository;
 import com.yarenkaplan.productinventory.repository.ProductRepository;
 import com.yarenkaplan.productinventory.services.ProductService;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -88,6 +84,11 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findProductsByCategoryId(categoryId).stream().map(this::mapToResponseDTO).toList();
     }
 
+    @Override
+    public List<ProductResponseDTO> findProductsByNameContainingIgnoreCase(String name) {
+        return productRepository.findProductsByNameContainingIgnoreCase(name).stream().map(this::mapToResponseDTO).toList();
+    }
+
     private ProductResponseDTO mapToResponseDTO(Product product) {
         Long categoryId = product.getCategory() != null ? product.getCategory().getId() : null;
         return new ProductResponseDTO(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getStock(), product.getStatus(), categoryId);
@@ -99,6 +100,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductResponseDTO> findProductsByStockGreaterThan(Integer stock) {
+        return productRepository.findProductsByStockGreaterThan(stock).stream().map(this::mapToResponseDTO).toList();
+    }
+
+    @Override
     public List<ProductResponseDTO> findProductsSortedByPrice() {
         return productRepository.findAll().stream().sorted(Comparator.comparing(Product::getPrice)).map(this::mapToResponseDTO).toList();
     }
@@ -106,6 +112,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductResponseDTO> findProductsSortedByPriceReverseOrder() {
         return productRepository.findAll().stream().sorted(Comparator.comparing(Product::getPrice).reversed()).map(this::mapToResponseDTO).toList();
+    }
+
+    @Override
+    public List<ProductResponseDTO> findProductsByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice) {
+        return productRepository.findProductsByPriceBetween(minPrice, maxPrice).stream().map(this::mapToResponseDTO).toList();
     }
 
     @Override

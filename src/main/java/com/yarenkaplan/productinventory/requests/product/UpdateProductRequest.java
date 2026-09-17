@@ -1,4 +1,4 @@
-package com.yarenkaplan.productinventory.requests;
+package com.yarenkaplan.productinventory.requests.product;
 
 import com.yarenkaplan.productinventory.enums.InventoryStatus;
 import lombok.AllArgsConstructor;

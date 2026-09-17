@@ -1,4 +1,4 @@
-package com.yarenkaplan.productinventory.requests;
+package com.yarenkaplan.productinventory.requests.product;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;

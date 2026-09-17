@@ -16,6 +16,8 @@ public interface ProductService {
 
     ProductResponseDTO findProductById(Long id);
 
+    List<ProductResponseDTO> findProductsByCategoryId(Long categoryId);
+
     List<ProductResponseDTO> findActiveProducts();
 
     List<ProductResponseDTO> findProductsSortedByPrice();

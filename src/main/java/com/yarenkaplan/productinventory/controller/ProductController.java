@@ -1,8 +1,8 @@
 package com.yarenkaplan.productinventory.controller;
 
 import com.yarenkaplan.productinventory.dto.ProductResponseDTO;
-import com.yarenkaplan.productinventory.requests.CreateProductRequest;
-import com.yarenkaplan.productinventory.requests.UpdateProductRequest;
+import com.yarenkaplan.productinventory.requests.product.CreateProductRequest;
+import com.yarenkaplan.productinventory.requests.product.UpdateProductRequest;
 import com.yarenkaplan.productinventory.services.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +31,7 @@ public class ProductController {
     }
 
     //get active products
-    @GetMapping("/activeProducts")
+    @GetMapping("/findActiveProducts")
     public List<ProductResponseDTO> findActiveProducts() {
         return productService.findActiveProducts();
     }
@@ -52,6 +52,11 @@ public class ProductController {
     @GetMapping("/{id}")
     public ProductResponseDTO findProductById(@PathVariable Long id) {
         return productService.findProductById(id);
+    }
+
+    @GetMapping("/findProductsByCategoryId/{categoryId}")
+    public List<ProductResponseDTO> findProductsByCategoryId(@PathVariable Long categoryId) {
+        return productService.findProductsByCategoryId(categoryId);
     }
 
     //put

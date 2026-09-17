@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -80,6 +81,11 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
 
         return mapToResponseDTO(product);
+    }
+
+    @Override
+    public List<ProductResponseDTO> findProductsByCategoryId(Long categoryId) {
+        return productRepository.findProductsByCategoryId(categoryId).stream().map(this::mapToResponseDTO).toList();
     }
 
     private ProductResponseDTO mapToResponseDTO(Product product) {

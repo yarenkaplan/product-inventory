@@ -1,12 +1,12 @@
 package com.yarenkaplan.productinventory.services;
 
 import com.yarenkaplan.productinventory.dto.ProductResponseDTO;
-import com.yarenkaplan.productinventory.entity.Product;
 import com.yarenkaplan.productinventory.enums.InventoryStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 public interface ProductService {
     //CRUD
@@ -29,7 +29,7 @@ public interface ProductService {
 
     List<ProductResponseDTO> findProductsByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice);
 
-    List<ProductResponseDTO> findAllProducts();
+    Page<ProductResponseDTO> findAllProducts(Pageable pageable);
 
     void deleteProductById(Long id);
 

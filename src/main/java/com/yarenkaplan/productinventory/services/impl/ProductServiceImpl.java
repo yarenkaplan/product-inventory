@@ -9,6 +9,8 @@ import com.yarenkaplan.productinventory.errors.ProductNotFoundException;
 import com.yarenkaplan.productinventory.repository.CategoryRepository;
 import com.yarenkaplan.productinventory.repository.ProductRepository;
 import com.yarenkaplan.productinventory.services.ProductService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -120,8 +122,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponseDTO> findAllProducts() {
-        return productRepository.findAll().stream().map(this::mapToResponseDTO).toList();
+    public Page<ProductResponseDTO> findAllProducts(Pageable pageable) {
+        Page<Product> products = productRepository.findAll(pageable);
+
+        return products.map(this::mapToResponseDTO);
     }
 
     @Override

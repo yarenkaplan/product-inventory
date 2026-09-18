@@ -6,6 +6,8 @@ import com.yarenkaplan.productinventory.requests.product.CreateProductRequest;
 import com.yarenkaplan.productinventory.requests.product.UpdateProductRequest;
 import com.yarenkaplan.productinventory.services.ProductService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -28,8 +30,8 @@ public class ProductController {
 
     //get all
     @GetMapping
-    public List<ProductResponseDTO> findAllProducts() {
-        return productService.findAllProducts();
+    public Page<ProductResponseDTO> findAllProducts(Pageable pageable) {
+        return productService.findAllProducts(pageable);
     }
 
     //get active products

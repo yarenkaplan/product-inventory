@@ -129,6 +129,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Page<ProductResponseDTO> findAllWithCategory(Pageable pageable) {
+        Page<Product> products = productRepository.findAllWithCategory(pageable);
+
+        return products.map(this::mapToResponseDTO);
+    }
+
+    @Override
     public void deleteProductById(Long id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
         productRepository.delete(product);

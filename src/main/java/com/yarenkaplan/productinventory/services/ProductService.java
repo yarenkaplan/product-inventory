@@ -31,6 +31,8 @@ public interface ProductService {
 
     Page<ProductResponseDTO> findAllProducts(Pageable pageable);
 
+    Page<ProductResponseDTO> findAllWithCategory(Pageable pageable);
+
     void deleteProductById(Long id);
 
     void deleteAllProducts();

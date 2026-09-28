@@ -1,5 +1,6 @@
 package com.yarenkaplan.productinventory.entity;
 
+import com.yarenkaplan.productinventory.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,11 +20,9 @@ public class Role {
     @Column(name ="id")
     private Long id;
 
-    @Column(name ="name")
-    private String name;
-
-    @Column(name ="description")
-    private String description;
+    @Enumerated(EnumType.STRING)
+    @Column(name ="name", nullable = false, unique = true)
+    private RoleEnum name;
 
     @CreatedDate
     @Column(name ="createdAt")

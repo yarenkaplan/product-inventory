@@ -34,6 +34,12 @@ public class ProductController {
         return productService.findAllProducts(pageable);
     }
 
+    //get all with category
+    @GetMapping("/findAllWithCategory")
+    public Page<ProductResponseDTO> findAllWithCategory(Pageable pageable) {
+        return productService.findAllWithCategory(pageable);
+    }
+
     //get active products
     @GetMapping("/findActiveProducts")
     public List<ProductResponseDTO> findActiveProducts() {

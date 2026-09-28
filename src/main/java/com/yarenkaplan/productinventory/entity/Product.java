@@ -3,7 +3,10 @@ package com.yarenkaplan.productinventory.entity;
 import com.yarenkaplan.productinventory.enums.InventoryStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -14,7 +17,6 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "products")
@@ -46,7 +48,7 @@ public class Product {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 }

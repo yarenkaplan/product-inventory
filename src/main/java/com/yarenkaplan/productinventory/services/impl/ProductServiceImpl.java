@@ -83,6 +83,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResponseDTO> findProductsByCategoryId(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundException(categoryId));
+
         return productRepository.findProductsByCategoryId(categoryId).stream().map(this::mapToResponseDTO).toList();
     }
 
@@ -113,7 +115,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResponseDTO> findProductsSortedByPriceReverseOrder() {
-        return productRepository.findAll().stream().sorted(Comparator.comparing(Product::getPrice).reversed()).map(this::mapToResponseDTO).toList();
+        return productRepository.findAll().stream().sorted(Comparator.comparing(Product::getPrice).reversed().thenComparing(Product::getId)).map(this::mapToResponseDTO).toList();
     }
 
     @Override

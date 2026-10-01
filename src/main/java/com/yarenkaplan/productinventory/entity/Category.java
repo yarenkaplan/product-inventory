@@ -1,6 +1,7 @@
 package com.yarenkaplan.productinventory.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,9 +27,11 @@ public class Category {
     private Long id;
 
     @Column(name = "name")
+    @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
     private String name;
 
     @Column(name = "description")
+    @Size(max = 500, message = "Description cannot exceed 500 characters")
     private String description;
 
     @CreatedDate

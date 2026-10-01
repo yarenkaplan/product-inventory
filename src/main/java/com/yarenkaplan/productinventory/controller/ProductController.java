@@ -86,7 +86,7 @@ public class ProductController {
 
     //put
     @PutMapping("/{id}")
-    public void updateProductById(@PathVariable Long id, @RequestBody UpdateProductRequest updateProductRequest) {
+    public void updateProductById(@PathVariable Long id, @Valid @RequestBody UpdateProductRequest updateProductRequest) {
         productService.updateProductById(id, updateProductRequest.getName(), updateProductRequest.getDescription(), updateProductRequest.getPrice(), updateProductRequest.getStock(), updateProductRequest.getStatus(), updateProductRequest.getCategoryId());
     }
 

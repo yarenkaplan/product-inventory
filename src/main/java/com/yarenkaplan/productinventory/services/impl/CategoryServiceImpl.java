@@ -66,6 +66,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void deleteCategoryById(Long id) {
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
+
         //update related products category id as null
         List<Product> products = productRepository.findProductsByCategoryId(id);
 
@@ -74,7 +76,7 @@ public class CategoryServiceImpl implements CategoryService {
         //@Transactional is used so saveAll is not necessary
         //productRepository.saveAll(products);
 
-        categoryRepository.deleteById(id);
+        categoryRepository.delete(category);
     }
 
     @Override

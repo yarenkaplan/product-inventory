@@ -33,7 +33,7 @@ public class CategoryController {
         return categoryService.findCategoryById(id);
     }
 
-    @GetMapping("/findAllCategories")
+    @GetMapping
     public List<CategoryResponseDTO> findAllCategories() {
         return categoryService.findAllCategories();
     }
@@ -43,7 +43,7 @@ public class CategoryController {
         categoryService.deleteCategoryById(id);
     }
 
-    @DeleteMapping("/deleteAllCategories")
+    @DeleteMapping
     public void deleteAllCategories() {
         categoryService.deleteAllCategories();
     }

@@ -6,11 +6,13 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @Table(name = "roles")
@@ -27,7 +29,7 @@ public class Role {
     private RoleEnum name;
 
     @CreatedDate
-    @Column(name ="createdAt")
+    @Column(name ="createdAt",nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "role")

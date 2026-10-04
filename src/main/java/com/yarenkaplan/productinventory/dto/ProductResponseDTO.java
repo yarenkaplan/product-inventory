@@ -1,6 +1,5 @@
 package com.yarenkaplan.productinventory.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yarenkaplan.productinventory.enums.InventoryStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

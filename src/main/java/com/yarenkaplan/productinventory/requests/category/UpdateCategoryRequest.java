@@ -1,6 +1,5 @@
 package com.yarenkaplan.productinventory.requests.category;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

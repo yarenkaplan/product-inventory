@@ -1,7 +1,6 @@
 package com.yarenkaplan.productinventory.services.impl;
 
 import com.yarenkaplan.productinventory.dto.CategoryResponseDTO;
-import com.yarenkaplan.productinventory.dto.ProductResponseDTO;
 import com.yarenkaplan.productinventory.entity.Category;
 import com.yarenkaplan.productinventory.entity.Product;
 import com.yarenkaplan.productinventory.errors.CategoryNotFoundException;

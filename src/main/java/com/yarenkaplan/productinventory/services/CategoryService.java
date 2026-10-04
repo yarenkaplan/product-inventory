@@ -1,10 +1,7 @@
 package com.yarenkaplan.productinventory.services;
 
 import com.yarenkaplan.productinventory.dto.CategoryResponseDTO;
-import com.yarenkaplan.productinventory.dto.ProductResponseDTO;
-import com.yarenkaplan.productinventory.enums.InventoryStatus;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface CategoryService {

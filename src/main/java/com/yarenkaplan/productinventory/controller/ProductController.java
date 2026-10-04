@@ -1,7 +1,6 @@
 package com.yarenkaplan.productinventory.controller;
 
 import com.yarenkaplan.productinventory.dto.ProductResponseDTO;
-import com.yarenkaplan.productinventory.entity.Product;
 import com.yarenkaplan.productinventory.requests.product.CreateProductRequest;
 import com.yarenkaplan.productinventory.requests.product.UpdateProductRequest;
 import com.yarenkaplan.productinventory.services.ProductService;

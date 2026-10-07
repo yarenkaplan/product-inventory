@@ -44,30 +44,38 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void updateProductById(Long id, String name, String description, BigDecimal price, int stock, InventoryStatus status, Long categoryId) {
         Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
-        if (!product.getName().equals(name) && !name.trim().isBlank() && (name != null)) {
+        if ((name != null) && !product.getName().equals(name) && !name.trim().isBlank()) {
             product.setName(name);
         }
 
-        if (!product.getDescription().equals(description) && !description.trim().isBlank() && (description != null)) {
+        if ((description != null) && !product.getDescription().equals(description) && !description.trim().isBlank()) {
             product.setDescription(description);
         }
 
         //if price defined as 0.0, it will be updated
-        if (!product.getPrice().equals(price)) {
+        if ((price != null) && !product.getPrice().equals(price)) {
             product.setPrice(price);
         }
 
         //if stock defined as 0, it will be updated
         if (!(product.getStock() == stock)) {
             product.setStock(stock);
+
+            if (product.getStock() == 0) {
+                product.setStatus(InventoryStatus.OUT_OF_STOCK);
+            }
+
+            if((product.getStock() > 0) && (product.getStatus() == InventoryStatus.OUT_OF_STOCK)){
+                product.setStatus(InventoryStatus.INACTIVE);
+            }
         }
 
         //if status defined different, it will be updated
-        if (!(product.getStatus() == status)) {
+        if ((status != null) && !(product.getStatus() == status)) {
             product.setStatus(status);
         }
 
-        if (!(categoryId.intValue() == 0)) {
+        if ((categoryId != null) && !(categoryId.intValue() == 0)) {
             Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundException(categoryId));
             product.setCategory(category);
         }

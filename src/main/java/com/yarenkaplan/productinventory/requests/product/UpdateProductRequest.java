@@ -2,6 +2,7 @@ package com.yarenkaplan.productinventory.requests.product;
 
 import com.yarenkaplan.productinventory.enums.InventoryStatus;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +23,10 @@ public class UpdateProductRequest {
 
     @Positive(message = "Price must be positive!")
     private BigDecimal price;
+
+    @PositiveOrZero(message = "Stock cannot be negative!")
     private Integer stock;
+
     private InventoryStatus status;
     private Long categoryId;
 }

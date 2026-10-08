@@ -2,6 +2,7 @@ package com.yarenkaplan.productinventory.entity;
 
 import com.yarenkaplan.productinventory.enums.RoleEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,16 +21,16 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name ="id")
+    @Column(name = "id")
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name ="name", nullable = false, unique = true)
-    @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
+    @Column(name = "name", nullable = false, unique = true)
+    @NotNull(message = "Role name cannot be null!")
     private RoleEnum name;
 
     @CreatedDate
-    @Column(name ="createdAt",nullable = false, updatable = false)
+    @Column(name = "createdAt", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "role")

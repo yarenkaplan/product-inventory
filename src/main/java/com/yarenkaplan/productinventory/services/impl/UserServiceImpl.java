@@ -3,6 +3,8 @@ package com.yarenkaplan.productinventory.services.impl;
 import com.yarenkaplan.productinventory.dto.UserResponseDTO;
 import com.yarenkaplan.productinventory.entity.Role;
 import com.yarenkaplan.productinventory.entity.User;
+import com.yarenkaplan.productinventory.enums.RoleEnum;
+import com.yarenkaplan.productinventory.errors.AccessDeniedException;
 import com.yarenkaplan.productinventory.errors.UserNotFoundException;
 import com.yarenkaplan.productinventory.repository.RoleRepository;
 import com.yarenkaplan.productinventory.repository.UserRepository;
@@ -11,8 +13,12 @@ import com.yarenkaplan.productinventory.requests.user.UpdateUserRequest;
 import com.yarenkaplan.productinventory.services.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -99,11 +105,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUserById(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String username = authentication.getName();
+        User user = userRepository.findByEmail(username).orElseThrow();
+        if (user.getRole().getName() != RoleEnum.ADMIN) {
+            throw new AccessDeniedException();
+        }
+
         userRepository.deleteById(id);
     }
 
     @Override
     public void deleteAllUsers() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String username = authentication.getName();
+        User user = userRepository.findByEmail(username).orElseThrow();
+        if (user.getRole().getName() != RoleEnum.ADMIN) {
+            throw new AccessDeniedException();
+        }
+
         userRepository.deleteAll();
     }
 }

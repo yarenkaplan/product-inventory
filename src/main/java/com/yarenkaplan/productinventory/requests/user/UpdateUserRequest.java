@@ -20,11 +20,9 @@ public class UpdateUserRequest {
     @Size(min = 2, max = 100, message = "Surname must be between 2 and 100 characters")
     private String surname;
 
-    @NotBlank(message = "Email cannot be blank!")
     @Email(message = "Email must be valid!")
     private String email;
 
-    @NotBlank
     private String password;
 
     private RoleEnum role;

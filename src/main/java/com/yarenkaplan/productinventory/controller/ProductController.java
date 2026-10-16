@@ -1,6 +1,7 @@
 package com.yarenkaplan.productinventory.controller;
 
 import com.yarenkaplan.productinventory.dto.ProductResponseDTO;
+import com.yarenkaplan.productinventory.enums.InventoryStatus;
 import com.yarenkaplan.productinventory.requests.product.CreateProductRequest;
 import com.yarenkaplan.productinventory.requests.product.UpdateProductRequest;
 import com.yarenkaplan.productinventory.services.ProductService;
@@ -24,7 +25,7 @@ public class ProductController {
     //post
     @PostMapping
     public void createProduct(@Valid @RequestBody CreateProductRequest createProductRequest) {
-        productService.createProduct(createProductRequest.getName(), createProductRequest.getDescription(), createProductRequest.getPrice(), createProductRequest.getStock());
+        productService.createProduct(createProductRequest);
     }
 
     //get all
@@ -33,10 +34,20 @@ public class ProductController {
         return productService.findAllProducts(pageable);
     }
 
+    @GetMapping("/findProductsByOrderByUpdatedAtDesc")
+    public List<ProductResponseDTO> findProductsByOrderByUpdatedAtDesc() {
+        return productService.findProductsByOrderByUpdatedAtDesc();
+    }
+
     //get all with category
     @GetMapping("/findAllWithCategory")
     public Page<ProductResponseDTO> findAllWithCategory(Pageable pageable) {
         return productService.findAllWithCategory(pageable);
+    }
+
+    @GetMapping("/statuses")
+    public InventoryStatus[] findAllProductStatuses() {
+        return productService.findAllProductStatuses();
     }
 
     //get active products

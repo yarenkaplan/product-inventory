@@ -25,7 +25,7 @@ public class CreateUserRequest {
     @Email(message = "Email must be valid!")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Password cannot be blank!")
     private String password;
 
     private RoleEnum role;

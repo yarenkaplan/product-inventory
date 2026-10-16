@@ -1,12 +1,16 @@
 package com.yarenkaplan.productinventory.controller;
 
 import com.yarenkaplan.productinventory.dto.UserResponseDTO;
+import com.yarenkaplan.productinventory.entity.User;
+import com.yarenkaplan.productinventory.enums.RoleEnum;
 import com.yarenkaplan.productinventory.requests.user.CreateUserRequest;
 import com.yarenkaplan.productinventory.requests.user.UpdateUserRequest;
 import com.yarenkaplan.productinventory.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -36,6 +40,13 @@ public class UserController {
     @GetMapping
     public Page<UserResponseDTO> findAllUsers(Pageable pageable) {
         return userService.findAllUsers(pageable);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> getCurrentUser(Authentication authentication) {
+        String email = authentication.getName();
+
+        return ResponseEntity.ok(userService.getCurrentUser(email));
     }
 
     @DeleteMapping("/{id}")

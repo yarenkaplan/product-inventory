@@ -20,4 +20,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p LEFT JOIN FETCH p.category")
     Page<Product> findAllWithCategory(Pageable pageable);
+
+    List<Product> findAllByOrderByUpdatedAtDesc();
  }

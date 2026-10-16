@@ -8,6 +8,7 @@ import com.yarenkaplan.productinventory.errors.CategoryNotFoundException;
 import com.yarenkaplan.productinventory.errors.ProductNotFoundException;
 import com.yarenkaplan.productinventory.repository.CategoryRepository;
 import com.yarenkaplan.productinventory.repository.ProductRepository;
+import com.yarenkaplan.productinventory.requests.product.CreateProductRequest;
 import com.yarenkaplan.productinventory.services.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,12 +32,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void createProduct(String name, String description, BigDecimal price, int stock) {
+    public void createProduct(CreateProductRequest createProductRequest) {
         Product product = new Product();
-        product.setName(name);
-        product.setDescription(description);
-        product.setPrice(price);
-        product.setStock(stock);
+        product.setName(createProductRequest.getName());
+        product.setDescription(createProductRequest.getDescription());
+        product.setPrice(createProductRequest.getPrice());
+        product.setStock(createProductRequest.getStock());
+
+        if (createProductRequest.getCategoryId() != null) {
+            Category category = categoryRepository.findById(createProductRequest.getCategoryId()).orElseThrow(() -> new CategoryNotFoundException(createProductRequest.getCategoryId()));
+            product.setCategory(category);
+        }
 
         productRepository.save(product);
     }
@@ -65,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
                 product.setStatus(InventoryStatus.OUT_OF_STOCK);
             }
 
-            if((product.getStock() > 0) && (product.getStatus() == InventoryStatus.OUT_OF_STOCK)){
+            if ((product.getStock() > 0) && (product.getStatus() == InventoryStatus.OUT_OF_STOCK)) {
                 product.setStatus(InventoryStatus.INACTIVE);
             }
         }
@@ -139,10 +145,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductResponseDTO> findProductsByOrderByUpdatedAtDesc() {
+        return productRepository.findAllByOrderByUpdatedAtDesc().stream().map(this::mapToResponseDTO).toList();
+    }
+
+    @Override
     public Page<ProductResponseDTO> findAllWithCategory(Pageable pageable) {
         Page<Product> products = productRepository.findAllWithCategory(pageable);
 
         return products.map(this::mapToResponseDTO);
+    }
+
+    @Override
+    public InventoryStatus[] findAllProductStatuses() {
+        return InventoryStatus.values();
     }
 
     @Override

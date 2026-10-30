@@ -9,12 +9,14 @@ import com.yarenkaplan.productinventory.errors.ProductNotFoundException;
 import com.yarenkaplan.productinventory.repository.CategoryRepository;
 import com.yarenkaplan.productinventory.repository.ProductRepository;
 import com.yarenkaplan.productinventory.requests.product.CreateProductRequest;
+import com.yarenkaplan.productinventory.requests.product.FilterProductRequest;
 import com.yarenkaplan.productinventory.services.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -170,5 +172,56 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteAllProducts() {
         productRepository.deleteAll();
+    }
+
+    @Override
+    public List<ProductResponseDTO> filterProducts(FilterProductRequest filterProductRequest) {
+        List<Product> products = new ArrayList<>(productRepository.findAll());
+
+        //name: case-insensitive filtering
+        if (filterProductRequest.getName() != null && !filterProductRequest.getName().trim().isEmpty()) {
+            List<Product> productsListNameFiltered = productRepository.findProductsByNameContainingIgnoreCase(filterProductRequest.getName().trim());
+
+            products.retainAll(productsListNameFiltered);
+        }
+
+        //description: case-insensitive filtering
+        if (filterProductRequest.getDescription() != null && !filterProductRequest.getDescription().trim().isEmpty()) {
+            List<Product> productsListDescriptionFiltered = productRepository.findProductsByDescriptionContainingIgnoreCase(filterProductRequest.getDescription().trim());
+
+            products.retainAll(productsListDescriptionFiltered);
+        }
+
+        //stock filtering
+        if (filterProductRequest.getStock() != null) {
+            List<Product> productsListStockFiltered = productRepository.findProductsByStockGreaterThanEqual(filterProductRequest.getStock());
+
+            products.retainAll(productsListStockFiltered);
+        }
+
+        //status filtering
+        if (filterProductRequest.getStatus() != null) {
+            List<Product> productsListStatusFiltered = productRepository.findProductsByStatus(filterProductRequest.getStatus());
+
+            products.retainAll(productsListStatusFiltered);
+        }
+
+        //categoryId filtering
+        if (filterProductRequest.getCategoryId() != null) {
+            List<Product> productsListCategoryIdFiltered = productRepository.findProductsByCategoryId(filterProductRequest.getCategoryId());
+
+            products.retainAll(productsListCategoryIdFiltered);
+        }
+
+        //price filtering
+        if (filterProductRequest.getMinPrice() != null && filterProductRequest.getMaxPrice() != null) {
+            products.retainAll(productRepository.findProductsByPriceBetween(filterProductRequest.getMinPrice(), filterProductRequest.getMaxPrice()));
+        } else if (filterProductRequest.getMinPrice() != null) {
+            products.retainAll(productRepository.findProductsByPriceGreaterThanEqual(filterProductRequest.getMinPrice()));
+        } else if (filterProductRequest.getMaxPrice() != null) {
+            products.retainAll(productRepository.findProductsByPriceLessThanEqual(filterProductRequest.getMaxPrice()));
+        }
+
+        return products.stream().map(this::mapToResponseDTO).toList();
     }
 }

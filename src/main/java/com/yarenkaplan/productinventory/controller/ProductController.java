@@ -1,8 +1,10 @@
 package com.yarenkaplan.productinventory.controller;
 
 import com.yarenkaplan.productinventory.dto.ProductResponseDTO;
+import com.yarenkaplan.productinventory.entity.Product;
 import com.yarenkaplan.productinventory.enums.InventoryStatus;
 import com.yarenkaplan.productinventory.requests.product.CreateProductRequest;
+import com.yarenkaplan.productinventory.requests.product.FilterProductRequest;
 import com.yarenkaplan.productinventory.requests.product.UpdateProductRequest;
 import com.yarenkaplan.productinventory.services.ProductService;
 import jakarta.validation.Valid;
@@ -109,5 +111,10 @@ public class ProductController {
     @DeleteMapping
     public void deleteAllProducts() {
         productService.deleteAllProducts();
+    }
+
+    @GetMapping("/filterProducts")
+    public List<ProductResponseDTO> filterProducts(@Valid FilterProductRequest filterProductRequest) {
+        return productService.filterProducts(filterProductRequest);
     }
 }

@@ -3,6 +3,7 @@ package com.yarenkaplan.productinventory.services;
 import com.yarenkaplan.productinventory.dto.ProductResponseDTO;
 import com.yarenkaplan.productinventory.enums.InventoryStatus;
 import com.yarenkaplan.productinventory.requests.product.CreateProductRequest;
+import com.yarenkaplan.productinventory.requests.product.FilterProductRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -26,6 +27,7 @@ public interface ProductService {
     List<ProductResponseDTO> findProductsByStockGreaterThan(Integer stock);
 
     List<ProductResponseDTO> findProductsSortedByPrice();
+
     List<ProductResponseDTO> findProductsSortedByPriceReverseOrder();
 
     List<ProductResponseDTO> findProductsByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice);
@@ -41,4 +43,6 @@ public interface ProductService {
     void deleteProductById(Long id);
 
     void deleteAllProducts();
+
+    List<ProductResponseDTO> filterProducts(FilterProductRequest filterProductRequest);
 }
